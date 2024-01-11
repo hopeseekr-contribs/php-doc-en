@@ -16,7 +16,20 @@
    Opens a new or existing zip archive for reading, writing or modifying.
   </para>
   <para>
-   Since libzip 1.6.0, an empty file is not a valid archive any longer.
+   Between libzip v1.6.0 (2020-01) and v1.10.0 (2023-06), passing an empty zip file to this method
+   resulted in an error return value of <constant>ZipArchive::ER_NOZIP</constant>.
+  </para>
+  <para>
+  This means that even patch releases of PHP have backwards incompatible results depending on their release
+  dates and their linked libzip versions. To work around this, you need this fix, you can use the following:
+     <programlisting role="php">
+<![CDATA[
+<?php
+if (version_compare('1.7.3', '1.10.0') === -1) {
+    unlink($emptyFile);
+}
+]]>
+     </programlisting>
   </para>
  </refsect1>
  <refsect1 role="parameters">
